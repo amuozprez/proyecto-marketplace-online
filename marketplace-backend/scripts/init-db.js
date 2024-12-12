@@ -1,9 +1,8 @@
-const pool = require("../db"); // Asegúrate de que la ruta a `db.js` sea correcta
+const pool = require("../db");
 
 const initDB = async () => {
   try {
     await pool.query(`
-      -- Crear tabla de usuarios
       CREATE TABLE IF NOT EXISTS users (
           id SERIAL PRIMARY KEY,
           name VARCHAR(255) NOT NULL,
@@ -15,7 +14,6 @@ const initDB = async () => {
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
 
-      -- Crear tabla de productos
       CREATE TABLE IF NOT EXISTS products (
           id SERIAL PRIMARY KEY,
           user_id INT REFERENCES users(id) ON DELETE CASCADE,
@@ -28,7 +26,6 @@ const initDB = async () => {
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
 
-      -- Crear tabla de favoritos
       CREATE TABLE IF NOT EXISTS favorites (
           id SERIAL PRIMARY KEY,
           user_id INT REFERENCES users(id) ON DELETE CASCADE,
@@ -36,7 +33,7 @@ const initDB = async () => {
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
-    console.log("Tablas creadas exitosamente.");
+    console.log("Tablas creadas exitosamente");
     process.exit(0);
   } catch (err) {
     console.error("Error al crear tablas:", err.message);
