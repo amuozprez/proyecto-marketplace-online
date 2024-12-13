@@ -2,6 +2,10 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../contexts/GlobalContext";
 
+// Centralizar la URL base de la API (opcional, pero recomendado)
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "https://proyecto-marketplace-online.onrender.com/api";
+
 const Login = () => {
   const { login } = useContext(GlobalContext);
   const navigate = useNavigate();
@@ -17,10 +21,6 @@ const Login = () => {
     e.preventDefault();
     setError("");
 
-    // Usar variable de entorno para determinar la URL base
-    const API_BASE_URL =
-      import.meta.env.VITE_API_URL || "http://localhost:3000/api";
-
     try {
       const response = await fetch(`${API_BASE_URL}/users/login`, {
         method: "POST",
@@ -30,8 +30,8 @@ const Login = () => {
 
       if (response.ok) {
         const { token } = await response.json();
-        await login(token); // Espera a que el contexto se actualice
-        navigate("/"); // Redirige al Home solo después de la autenticación
+        await login(token); // Actualiza el contexto global con el token
+        navigate("/"); // Redirige al usuario a la página principal
       } else {
         const errorData = await response.json();
         setError(errorData.error || "Error al iniciar sesión.");
