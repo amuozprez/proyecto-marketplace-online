@@ -13,7 +13,7 @@ export const GlobalProvider = ({ children }) => {
 
   // Usar variable de entorno para determinar la URL base
   const API_BASE_URL =
-    import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+    import.meta.env.VITE_API_URL || "https://proyecto-marketplace-online.onrender.com/api";
 
   // Iniciar sesión
   const login = async (token) => {
