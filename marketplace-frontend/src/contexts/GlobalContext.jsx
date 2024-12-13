@@ -13,7 +13,8 @@ export const GlobalProvider = ({ children }) => {
 
   // Usar variable de entorno para determinar la URL base
   const API_BASE_URL =
-    import.meta.env.VITE_API_URL || "https://proyecto-marketplace-online.onrender.com/api";
+    import.meta.env.VITE_API_URL ||
+    "https://proyecto-marketplace-online.onrender.com/api";
 
   // Iniciar sesión
   const login = async (token) => {
@@ -23,12 +24,13 @@ export const GlobalProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
-      } else {
-        logout();
+      if (!response.ok) {
+        console.error(`Error HTTP: ${response.status}`);
+        throw new Error("Error al obtener los datos del usuario");
       }
+
+      const userData = await response.json();
+      setUser(userData);
     } catch (error) {
       console.error("Error al obtener datos del usuario:", error);
       logout();

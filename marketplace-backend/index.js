@@ -15,11 +15,16 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/products", productRoutes);
 
+// Manejar rutas inexistentes
+app.use((req, res) => {
+  res.status(404).json({ error: "Ruta no encontrada" });
+});
+
 // Hacer pública la carpeta 'uploads'
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Clave secreta para JWT
-const SECRET_KEY = "tu_secreto_para_jwt";
+const SECRET_KEY = process.env.JWT_SECRET;
 
 // Ruta para registrar un nuevo usuario
 app.post("/api/users/register", async (req, res) => {

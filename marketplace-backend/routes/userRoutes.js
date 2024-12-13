@@ -1,13 +1,17 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { createUser, getUserByEmail } = require("../consultas");
-const router = express.Router();
 const pool = require("../db");
+const router = express.Router();
 
 // Registro de usuario
 router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  }
+
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await pool.query(
@@ -24,17 +28,28 @@ router.post("/register", async (req, res) => {
 // Inicio de sesión
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  
+
+  if (!email || !password) {
+    return res.status(400).json({ error: "Email y contraseña son obligatorios" });
+  }
+
   try {
-    const user = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    const user = await pool.query("SELECT id, password FROM users WHERE email = $1", [email]);
     if (user.rows.length === 0) {
       return res.status(400).json({ error: "Credenciales inválidas" });
     }
+
     const validPassword = await bcrypt.compare(password, user.rows[0].password);
     if (!validPassword) {
       return res.status(400).json({ error: "Credenciales inválidas" });
     }
-    const token = jwt.sign({ id: user.rows[0].id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET no está definido");
+      return res.status(500).json({ error: "Error de configuración del servidor" });
+    }
+
+    const token = jwt.sign({ id: user.rows[0].id }, process.env.JWT_SECRET, { expiresIn: "2h" });
     res.status(200).json({ token });
   } catch (err) {
     console.error("Error al iniciar sesión:", err);

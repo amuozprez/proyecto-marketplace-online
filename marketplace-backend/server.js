@@ -13,14 +13,17 @@ const app = express();
 app.use(cors()); // Habilitar CORS
 app.use(express.json()); // Parsear JSON en las solicitudes
 
-// Middleware para servir archivos estáticos (frontend)
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "public")));
-}
-
 // Rutas API
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
+
+// Middleware para servir archivos estáticos (frontend)
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "public")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+  });
+}
 
 // Redirigir todas las demás rutas al frontend
 if (process.env.NODE_ENV === "production") {
