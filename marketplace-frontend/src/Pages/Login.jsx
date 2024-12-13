@@ -17,8 +17,12 @@ const Login = () => {
     e.preventDefault();
     setError("");
 
+    // Usar variable de entorno para determinar la URL base
+    const API_BASE_URL =
+      import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+
     try {
-      const response = await fetch("http://localhost:3000/api/users/login", {
+      const response = await fetch(`${API_BASE_URL}/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
