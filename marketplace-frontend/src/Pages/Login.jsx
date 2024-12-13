@@ -20,20 +20,24 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+  
+    // Verificar los datos que se envían
+    console.log("Datos enviados:", formData);
+  
     try {
       const response = await fetch(`${API_BASE_URL}/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
+  
       if (response.ok) {
         const { token } = await response.json();
-        await login(token); // Actualiza el contexto global con el token
-        navigate("/"); // Redirige al usuario a la página principal
+        await login(token);
+        navigate("/");
       } else {
         const errorData = await response.json();
+        console.error("Respuesta del backend:", errorData);
         setError(errorData.error || "Error al iniciar sesión.");
       }
     } catch (err) {
@@ -41,6 +45,7 @@ const Login = () => {
       setError("Ocurrió un error. Por favor, intenta nuevamente.");
     }
   };
+
 
   return (
     <div className="login container">
