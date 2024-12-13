@@ -2,10 +2,6 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../contexts/GlobalContext";
 
-// Centralizar la URL base de la API (opcional, pero recomendado)
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "https://proyecto-marketplace-online.onrender.com/api";
-
 const Login = () => {
   const { login } = useContext(GlobalContext);
   const navigate = useNavigate();
@@ -21,8 +17,8 @@ const Login = () => {
     e.preventDefault();
     setError("");
   
-    // Verificar los datos que se envían
-    console.log("Datos enviados:", formData);
+    const API_BASE_URL =
+      import.meta.env.VITE_API_URL || "https://proyecto-marketplace-online.onrender.com/api";
   
     try {
       const response = await fetch(`${API_BASE_URL}/users/login`, {
@@ -37,7 +33,6 @@ const Login = () => {
         navigate("/");
       } else {
         const errorData = await response.json();
-        console.error("Respuesta del backend:", errorData);
         setError(errorData.error || "Error al iniciar sesión.");
       }
     } catch (err) {
