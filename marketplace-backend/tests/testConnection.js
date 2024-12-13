@@ -6,7 +6,7 @@ const pool = require("../db");
     console.log("Conexión exitosa:", res.rows[0]);
     pool.end();
   } catch (err) {
-    console.error("Error conectándose a la base de datos", err.message);
+    console.error("Error conectándose a la base de datos:", err.message);
     pool.end();
   }
 })();
