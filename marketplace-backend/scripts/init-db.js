@@ -36,7 +36,7 @@ const initDB = async () => {
     console.log("Tablas creadas exitosamente");
     process.exit(0);
   } catch (err) {
-    console.error("Error al crear tablas:", err.message);
+    console.error("Error al crear tablas", err.message);
     process.exit(1);
   }
 };
