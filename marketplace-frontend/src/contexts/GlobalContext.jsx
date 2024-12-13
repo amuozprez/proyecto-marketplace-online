@@ -11,7 +11,7 @@ export const GlobalProvider = ({ children }) => {
     return storedCart ? JSON.parse(storedCart) : [];
   });
 
-  const API_BASE_URL = "/api";
+  const API_BASE_URL = "https://proyecto-marketplace-online.onrender.com/";
 
   // Iniciar sesión
   const login = async (token) => {
