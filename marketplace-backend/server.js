@@ -17,14 +17,6 @@ app.use(express.json()); // Parsear JSON en las solicitudes
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 
-// Middleware para servir archivos estáticos (frontend)
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "public")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
-  });
-}
-
 // Redirigir todas las demás rutas al frontend
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "public")));

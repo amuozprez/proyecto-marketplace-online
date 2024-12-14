@@ -13,11 +13,20 @@ const app = express();
 // Configuración
 app.use(cors());
 app.use(express.json());
+app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 
 // Manejar rutas inexistentes
 app.use((req, res) => {
   res.status(404).json({ error: "Ruta no encontrada" });
+});
+
+// Servir archivos estáticos solo después de las rutas de la API
+app.use(express.static(path.join(__dirname, "public")));
+
+// Manejo de rutas no encontradas
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // Hacer pública la carpeta 'uploads'
